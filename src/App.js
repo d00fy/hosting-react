@@ -1,34 +1,17 @@
 import "./App.css";
-import React, { useState } from "react";
-import {
-  Radar,
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  ResponsiveContainer,
-  Tooltip,
-  Text,
-  Legend
-} from "recharts";
+import React, { ReactDOM, useState, useEffect } from "react";
 
-import {
-  TwitterTimelineEmbed,
-  TwitterShareButton,
-  TwitterFollowButton,
-  TwitterHashtagButton,
-  TwitterMentionButton,
-  TwitterTweetEmbed,
-  TwitterMomentShare,
-  TwitterDMButton,
-  TwitterVideoEmbed,
-  TwitterOnAirButton
-} from "react-twitter-embed";
+import TwoLevelPieChart from "./Chart";
+import Canvas from "./Canvas";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Slider from "@material-ui/core/Slider";
+// import saveSvgAsPng from "../node_modules/save-svg-as-png/lib/saveSvgAsPng";
+// var XMLParser = require("react-xml-parser");
+import { TwitterShareButton } from "react-twitter-embed";
 
+//----------------スライダー関連
 const useStyles = makeStyles(theme => ({
   root: {
     width: 200,
@@ -38,54 +21,11 @@ const useStyles = makeStyles(theme => ({
     height: theme.spacing(3)
   }
 }));
-
 const marks = [
   {
     value: 0
   }
 ];
-
-class TwoLevelPieChart extends React.Component {
-  render() {
-    return (
-      <RadarChart
-        className="App"
-        cx={300}
-        cy={250}
-        outerRadius={150}
-        width={600}
-        height={500}
-        data={[
-          { subject: "目", A: this.props.eye, B: 110, fullMark: 150 },
-          { subject: "手", A: this.props.hand, B: 130, fullMark: 150 },
-          { subject: "頭", A: this.props.head, B: 130, fullMark: 150 },
-          { subject: "口", A: this.props.mouse, B: 100, fullMark: 150 },
-          { subject: "足", A: this.props.leg, B: 90, fullMark: 150 },
-          { subject: "心", A: this.props.mental, B: 85, fullMark: 150 }
-        ]}
-      >
-        <Legend
-          verticalAlign={"center"}
-          iconType={"star"}
-          wrapperStyle={{
-            marginTop: "24px"
-          }}
-        />
-        <PolarGrid />
-        <PolarAngleAxis dataKey="subject" />
-        <PolarRadiusAxis />
-        <Radar
-          name={this.props.name}
-          dataKey="A"
-          stroke="#8884d8"
-          fill="#8884d8"
-          fillOpacity={0.6}
-        ></Radar>
-      </RadarChart>
-    );
-  }
-}
-
 const divStyle = {
   overflowY: "scroll",
   border: "1px solid grey",
@@ -95,6 +35,7 @@ const divStyle = {
   position: "relative",
   margin: "auto"
 };
+//-------------------------------スライダー関連
 
 function App() {
   const [eye, eyeCount] = useState(90);
@@ -104,6 +45,8 @@ function App() {
   const [leg, legCount] = useState(90);
   const [mental, mentalCount] = useState(90);
   const [name, setName] = useState("肩書き");
+  const [svg, setSvg] = useState("");
+
   const classes = useStyles();
 
   const handleChange = event => {
@@ -111,10 +54,16 @@ function App() {
     console.log(name);
   };
 
+  const handleSvg = sentSvg => {
+    setSvg(sentSvg);
+    console.log(svg);
+  };
+
   return (
     <>
       <div className="App">
         <TwoLevelPieChart
+          id="testes"
           eye={eye}
           hand={hand}
           head={head}
@@ -122,25 +71,24 @@ function App() {
           leg={leg}
           mental={mental}
           name={name}
+          val={handleSvg}
         />
-        <form>
-          <label>
-            Name:
-            <input
-              type="text"
-              name="name"
-              value={name}
-              onChange={handleChange}
-            />
-          </label>
-          {/* <input
+        {/* <form> */}
+        <label>
+          Name:
+          <input type="text" name="name" value={name} onChange={handleChange} />
+        </label>
+        {/* <input
             type="button"
             value="click"
             onClick={() => {
-              console.log("aa");
+              // svgToPng(React.createElement(TwoLevelPieChart), 200, 200);
+              // console.log(<RadarChart />);
             }}
           /> */}
-        </form>
+        {/* </form> */}
+
+        {/* //--------------------- スライダー関連*/}
         <div style={divStyle}>
           <div className={classes.root}>
             <Typography id="discrete-slider-custom" gutterBottom>
@@ -229,9 +177,10 @@ function App() {
             />
           </div>
         </div>
+        <Canvas svg={svg} name={name} />
         <TwitterShareButton
           url={"https://d00fy.github.io/hosting-react/"}
-          options={{ text: "デザイナー診断", via: "uchibashi" }}
+          options={{ text: "デザインチャート", via: "uchibashi" }}
         />
       </div>
     </>
