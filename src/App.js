@@ -5,8 +5,25 @@ import {
   RadarChart,
   PolarGrid,
   PolarAngleAxis,
-  PolarRadiusAxis
+  PolarRadiusAxis,
+  ResponsiveContainer,
+  Tooltip,
+  Text,
+  Legend
 } from "recharts";
+
+import {
+  TwitterTimelineEmbed,
+  TwitterShareButton,
+  TwitterFollowButton,
+  TwitterHashtagButton,
+  TwitterMentionButton,
+  TwitterTweetEmbed,
+  TwitterMomentShare,
+  TwitterDMButton,
+  TwitterVideoEmbed,
+  TwitterOnAirButton
+} from "react-twitter-embed";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -14,7 +31,7 @@ import Slider from "@material-ui/core/Slider";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: 300,
+    width: 200,
     margin: "auto"
   },
   margin: {
@@ -47,29 +64,52 @@ class TwoLevelPieChart extends React.Component {
           { subject: "心", A: this.props.mental, B: 85, fullMark: 150 }
         ]}
       >
+        <Legend
+          verticalAlign={"center"}
+          iconType={"star"}
+          wrapperStyle={{
+            marginTop: "24px"
+          }}
+        />
         <PolarGrid />
         <PolarAngleAxis dataKey="subject" />
         <PolarRadiusAxis />
         <Radar
-          name="Mike"
+          name={this.props.name}
           dataKey="A"
           stroke="#8884d8"
           fill="#8884d8"
           fillOpacity={0.6}
-        />
+        ></Radar>
       </RadarChart>
     );
   }
 }
 
+const divStyle = {
+  overflowY: "scroll",
+  border: "1px solid grey",
+  borderRadius: "3px",
+  width: "500px",
+  height: "200px",
+  position: "relative",
+  margin: "auto"
+};
+
 function App() {
-  const [eye, eyeCount] = useState(10);
-  const [hand, handCount] = useState(10);
-  const [head, headCount] = useState(10);
-  const [mouse, mouseCount] = useState(10);
-  const [leg, legCount] = useState(10);
-  const [mental, mentalCount] = useState(10);
+  const [eye, eyeCount] = useState(90);
+  const [hand, handCount] = useState(90);
+  const [head, headCount] = useState(90);
+  const [mouse, mouseCount] = useState(90);
+  const [leg, legCount] = useState(90);
+  const [mental, mentalCount] = useState(90);
+  const [name, setName] = useState("肩書き");
   const classes = useStyles();
+
+  const handleChange = event => {
+    setName(event.target.value);
+    console.log(name);
+  };
 
   return (
     <>
@@ -81,93 +121,118 @@ function App() {
           mouse={mouse}
           leg={leg}
           mental={mental}
+          name={name}
         />
-        <div className={classes.root}>
-          <Typography id="discrete-slider-custom" gutterBottom>
-            目
-          </Typography>
-          <Slider
-            defaultValue={10}
-            max={120}
-            getAriaValueText={value => {
-              eyeCount(value);
+        <form>
+          <label>
+            Name:
+            <input
+              type="text"
+              name="name"
+              value={name}
+              onChange={handleChange}
+            />
+          </label>
+          {/* <input
+            type="button"
+            value="click"
+            onClick={() => {
+              console.log("aa");
             }}
-            aria-labelledby="discrete-slider-custom"
-            step={1}
-            valueLabelDisplay="auto"
-            marks={marks}
-          />
-          <Typography id="discrete-slider-custom" gutterBottom>
-            手
-          </Typography>
-          <Slider
-            defaultValue={10}
-            max={120}
-            getAriaValueText={value => {
-              handCount(value);
-            }}
-            aria-labelledby="discrete-slider-custom"
-            step={1}
-            valueLabelDisplay="auto"
-            marks={marks}
-          />
-          <Typography id="discrete-slider-custom" gutterBottom>
-            頭
-          </Typography>
-          <Slider
-            defaultValue={10}
-            max={120}
-            getAriaValueText={value => {
-              headCount(value);
-            }}
-            aria-labelledby="discrete-slider-custom"
-            step={1}
-            valueLabelDisplay="auto"
-            marks={marks}
-          />
-          <Typography id="discrete-slider-custom" gutterBottom>
-            口
-          </Typography>
-          <Slider
-            defaultValue={10}
-            max={120}
-            getAriaValueText={value => {
-              mouseCount(value);
-            }}
-            aria-labelledby="discrete-slider-custom"
-            step={1}
-            valueLabelDisplay="auto"
-            marks={marks}
-          />
-          <Typography id="discrete-slider-custom" gutterBottom>
-            足
-          </Typography>
-          <Slider
-            defaultValue={10}
-            max={120}
-            getAriaValueText={value => {
-              legCount(value);
-            }}
-            aria-labelledby="discrete-slider-custom"
-            step={1}
-            valueLabelDisplay="auto"
-            marks={marks}
-          />
-          <Typography id="discrete-slider-custom" gutterBottom>
-            心
-          </Typography>
-          <Slider
-            defaultValue={10}
-            max={120}
-            getAriaValueText={value => {
-              mentalCount(value);
-            }}
-            aria-labelledby="discrete-slider-custom"
-            step={1}
-            valueLabelDisplay="auto"
-            marks={marks}
-          />
+          /> */}
+        </form>
+        <div style={divStyle}>
+          <div className={classes.root}>
+            <Typography id="discrete-slider-custom" gutterBottom>
+              目
+            </Typography>
+            <Slider
+              defaultValue={90}
+              max={120}
+              getAriaValueText={value => {
+                eyeCount(value);
+              }}
+              aria-labelledby="discrete-slider-custom"
+              step={1}
+              valueLabelDisplay="auto"
+              marks={marks}
+            />
+            <Typography id="discrete-slider-custom" gutterBottom>
+              手
+            </Typography>
+            <Slider
+              defaultValue={90}
+              max={120}
+              getAriaValueText={value => {
+                handCount(value);
+              }}
+              aria-labelledby="discrete-slider-custom"
+              step={1}
+              valueLabelDisplay="auto"
+              marks={marks}
+            />
+            <Typography id="discrete-slider-custom" gutterBottom>
+              頭
+            </Typography>
+            <Slider
+              defaultValue={90}
+              max={120}
+              getAriaValueText={value => {
+                headCount(value);
+              }}
+              aria-labelledby="discrete-slider-custom"
+              step={1}
+              valueLabelDisplay="auto"
+              marks={marks}
+            />
+            <Typography id="discrete-slider-custom" gutterBottom>
+              口
+            </Typography>
+            <Slider
+              defaultValue={90}
+              max={120}
+              getAriaValueText={value => {
+                mouseCount(value);
+              }}
+              aria-labelledby="discrete-slider-custom"
+              step={1}
+              valueLabelDisplay="auto"
+              marks={marks}
+            />
+            <Typography id="discrete-slider-custom" gutterBottom>
+              足
+            </Typography>
+            <Slider
+              defaultValue={90}
+              max={120}
+              getAriaValueText={value => {
+                legCount(value);
+              }}
+              aria-labelledby="discrete-slider-custom"
+              step={1}
+              valueLabelDisplay="auto"
+              marks={marks}
+            />
+            <Typography id="discrete-slider-custom" gutterBottom>
+              心
+            </Typography>
+            <Slider
+              defaultValue={90}
+              max={120}
+              getAriaValueText={value => {
+                mentalCount(value);
+              }}
+              aria-labelledby="discrete-slider-custom"
+              step={1}
+              valueLabelDisplay="auto"
+              marks={marks}
+            />
+          </div>
         </div>
+        <TwitterShareButton
+          url={"https://d00fy.github.io/hosting-react/"}
+          options={{ text: "デザイナー診断", via: "uchibashi" }}
+        />
       </div>
     </>
   );
