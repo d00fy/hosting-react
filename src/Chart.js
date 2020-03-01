@@ -8,6 +8,8 @@ import {
   Legend
 } from "recharts";
 
+import MediaQuery from "react-responsive";
+
 class TwoLevelPieChart extends React.Component {
   exportSVG = element => {
     const svg = element;
@@ -28,42 +30,84 @@ class TwoLevelPieChart extends React.Component {
 
   render() {
     return (
-      <RadarChart
-        id="tes"
-        className="App"
-        cx={300}
-        cy={250}
-        outerRadius={150}
-        width={600}
-        height={500}
-        data={[
-          { subject: "目", A: this.props.eye, B: 110, fullMark: 150 },
-          { subject: "手", A: this.props.hand, B: 130, fullMark: 150 },
-          { subject: "頭", A: this.props.head, B: 130, fullMark: 150 },
-          { subject: "口", A: this.props.mouse, B: 100, fullMark: 150 },
-          { subject: "足", A: this.props.leg, B: 90, fullMark: 150 },
-          { subject: "心", A: this.props.mental, B: 85, fullMark: 150 }
-        ]}
-      >
-        <Legend
-          id="katagaki"
-          verticalAlign={"center"}
-          iconType={"star"}
-          wrapperStyle={{
-            marginTop: "24px"
-          }}
-        />
-        <PolarGrid />
-        <PolarAngleAxis dataKey="subject" />
-        <PolarRadiusAxis />
-        <Radar
-          name={this.props.name}
-          dataKey="A"
-          stroke="#8884d8"
-          fill="#8884d8"
-          fillOpacity={0.6}
-        ></Radar>
-      </RadarChart>
+      <>
+        <MediaQuery query="(min-width: 768px)">
+          <RadarChart
+            id="tes"
+            className="App"
+            cx={300} //300
+            cy={250} //250
+            outerRadius={150} //150
+            width={600}
+            height={450}
+            data={[
+              { subject: "目", A: this.props.eye, fullmark: 100 },
+              { subject: "手", A: this.props.hand, fullmark: 100 },
+              { subject: "頭", A: this.props.head, fullmark: 100 },
+              { subject: "口", A: this.props.mouse, fullmark: 100 },
+              { subject: "足", A: this.props.leg, fullmark: 100 },
+              { subject: "心", A: this.props.mental, fullmark: 100 }
+            ]}
+          >
+            <Legend
+              id="katagaki"
+              verticalAlign={"center"}
+              iconType={"star"}
+              wrapperStyle={{
+                marginTop: "24px"
+              }}
+            />
+            <PolarGrid />
+            <PolarAngleAxis dataKey="subject" />
+            <PolarRadiusAxis angle={30} domain={[0, 100]} />
+            <Radar
+              name={this.props.name}
+              dataKey="A"
+              stroke="#8884d8"
+              fill="#8884d8"
+              fillOpacity={0.6}
+            ></Radar>
+          </RadarChart>
+        </MediaQuery>
+        <MediaQuery query="(max-width: 767px)">
+          <RadarChart
+            id="tes"
+            className="App"
+            cx={188} //300
+            cy={180} //250
+            outerRadius={100} //150
+            width={375}
+            height={300}
+            data={[
+              { subject: "目", A: this.props.eye, fullmark: 100 },
+              { subject: "手", A: this.props.hand, fullmark: 100 },
+              { subject: "頭", A: this.props.head, fullmark: 100 },
+              { subject: "口", A: this.props.mouse, fullmark: 100 },
+              { subject: "足", A: this.props.leg, fullmark: 100 },
+              { subject: "心", A: this.props.mental, fullmark: 100 }
+            ]}
+          >
+            <Legend
+              id="katagaki"
+              verticalAlign={"center"}
+              iconType={"star"}
+              wrapperStyle={{
+                marginTop: "24px"
+              }}
+            />
+            <PolarGrid />
+            <PolarAngleAxis dataKey="subject" />
+            <PolarRadiusAxis angle={30} domain={[0, 100]} />
+            <Radar
+              name={this.props.name}
+              dataKey="A"
+              stroke="#8884d8"
+              fill="#8884d8"
+              fillOpacity={0.6}
+            ></Radar>
+          </RadarChart>
+        </MediaQuery>
+      </>
     );
   }
 }
