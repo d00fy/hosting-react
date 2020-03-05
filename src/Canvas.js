@@ -2,6 +2,11 @@ import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
 import MediaQuery from "react-responsive";
 
+//yarn add firebase & config.js をinitするのみ。
+import firebase from "firebase";
+import { firebaseConfig } from "./firebase-config";
+firebase.initializeApp(firebaseConfig);
+
 const style = {
   border: "1px solid gray",
   backgroundColor: "white",
@@ -44,7 +49,20 @@ class Canvas extends Component {
       var url = canvas.toDataURL();
       this.props.val(url);
       this.setState({ drawing: url });
-      //   console.log(this.state.drawing);
+      // console.log(this.state.drawing);
+
+      const storage = firebase.storage();
+      url = url.substring(22);
+      var a = Math.floor(Math.random() * 101);
+      const storageRef = storage.ref().child(`test/${a}`);
+      const handleTwitter = this.props.handleTwitter;
+      storageRef.putString(url, "base64").then(function(snapshot) {
+        storageRef.getDownloadURL().then(function(url) {
+          console.log(url);
+          handleTwitter(url);
+          console.log("ok");
+        });
+      });
     };
   }
 
@@ -87,7 +105,8 @@ class Canvas extends Component {
             variant="contained"
             onClick={() => {
               this.test();
-              alert("done!");
+
+              alert("done!!!!");
             }}
           >
             画像を生成

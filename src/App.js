@@ -13,6 +13,11 @@ import Slider from "@material-ui/core/Slider";
 import { TwitterShareButton, TwitterIcon } from "react-share";
 import MediaQuery from "react-responsive";
 
+//yarn add firebase & config.js をinitするのみ。
+import firebase from "firebase";
+import { firebaseConfig } from "./firebase-config";
+// firebase.initializeApp(firebaseConfig);
+
 //----------------スライダー関連
 const useStyles = makeStyles(theme => ({
   root: {
@@ -62,6 +67,7 @@ function App() {
   const [name, setName] = useState("UIデザイナー");
   const [svg, setSvg] = useState("");
   const [url, setUrl] = useState("");
+  const [twitter, setTwitter] = useState("test");
 
   const classes = useStyles();
 
@@ -71,13 +77,14 @@ function App() {
   };
   const handleSvg = sentSvg => {
     setSvg(sentSvg);
-    console.log(svg);
   };
 
   const handleUrl = sentUrl => {
     setUrl(sentUrl);
-    console.log(url);
-    console.log("走ってる");
+  };
+
+  const handleTwitter = sentTwitter => {
+    setTwitter(sentTwitter);
   };
 
   // 朱度(prevProps) {
@@ -87,9 +94,12 @@ function App() {
   //     console.log("走ってる")
   //   }
   // }
+
   useEffect(() => {
     handleUrl(url);
-  }, []);
+    // handleTwitter(twitter);
+    console.log("きてる？");
+  }, [twitter]);
 
   return (
     <>
@@ -102,14 +112,9 @@ function App() {
           content={"https://d00fy.github.io/hosting-react/"}
         />
         <meta property="og:type" content={"website"} />
-        <meta property="og:site_name" content={"なんでもいいよ"} />
-        <meta
-          property="og:image"
-          content={
-            "http://www.zubapita.jp/wp-content/uploads/2009/02/screenshot-02.jpg"
-          }
-        />
-        <meta name="twitter:card" content="summary" />
+        <meta property="og:site_name" content={"UIUX"} />
+        <meta property="og:image" content={twitter} />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content={`@uchibashi`} />
       </Helmet>
       <div className="App">
@@ -131,7 +136,7 @@ function App() {
           <div style={divStyle}>
             <div className={classes.root}>
               <label>
-                肩書き:
+                {twitter}
                 <input
                   type="text"
                   name="name"
@@ -221,7 +226,12 @@ function App() {
             </div>
           </div>
           {/* </div> */}
-          <Canvas svg={svg} name={name} val={handleUrl} />
+          <Canvas
+            svg={svg}
+            name={name}
+            val={handleUrl}
+            handleTwitter={handleTwitter}
+          />
           <TwitterShareButton
             title="6個の項目を入力し、デザイナーとしてのあなたの適性を自己評価！"
             via="uchibashi"
